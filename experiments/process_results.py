@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 DEVICES = [
     'RTX2070',
     'RTX2080Ti',
+    'RTX3060Ti',
     'P4000',
     'T4',
     'P100',

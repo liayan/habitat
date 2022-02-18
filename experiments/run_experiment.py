@@ -21,6 +21,7 @@ DEVICES = [
     habitat.Device.T4,
     habitat.Device.RTX2070,
     habitat.Device.RTX2080Ti,
+    habitat.Device.RTX3060Ti,
 ]
 
 RESNET50_BATCHES = [16, 32, 64]

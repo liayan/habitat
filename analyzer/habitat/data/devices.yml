@@ -65,6 +65,19 @@ RTX2080Ti:
   base_clock_mhz: 1350
   peak_gflops_per_second: 5938
 
+RTX3060Ti:
+  compute_major: 8
+  compute_minor: 6
+  max_threads_per_block: 1024
+  max_threads_per_multiprocessor: 1536
+  regs_per_block: 65536
+  regs_per_multiprocessor: 65536
+  warp_size: 32
+  shared_mem_per_block: 49152
+  shared_mem_per_multiprocessor: 102400
+  num_sms: 38
+  shared_mem_per_block_optin: 101376
+
 P4:
   compute_major: 6
   compute_minor: 1
