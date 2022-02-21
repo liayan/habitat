@@ -77,6 +77,9 @@ RTX3060Ti:
   shared_mem_per_multiprocessor: 102400
   num_sms: 38
   shared_mem_per_block_optin: 101376
+  mem_bandwidth_gb: 448
+  base_clock_mhz: 1410
+  peak_gflops_per_second: 8938
 
 P4:
   compute_major: 6

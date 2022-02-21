@@ -28,6 +28,9 @@ int main(int argc, char* argv[]) {
   std::cout << "shared_mem_per_multiprocessor: " << props.sharedMemPerMultiprocessor << std::endl;
   std::cout << "num_sms: " << props.multiProcessorCount << std::endl;
   std::cout << "shared_mem_per_block_optin: " << props.sharedMemPerBlockOptin << std::endl;
+  std::cout << "mem_bandwith_gb: " << props.memBandwithGb << std::endl;
+  std::cout << "base_clock_mhz: " << props.baseClockMhz << std::endl;
+  std::cout << "peak_gflops_per_second: " << props.peakGflopsPerSecond << std::endl;
 
   return 0;
 }
