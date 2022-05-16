@@ -17,12 +17,10 @@ target_link_libraries(habitat-cuda-lib
     CUDA::cudart
     CUDA::cuda_driver
     cupti_profilerhost_util
-    ${NVPerf_LIBRARIES}
 )
 
 target_include_directories(habitat-cuda-lib
   PRIVATE
-    ${CUPTI_INCLUDE_DIRS}
 )
 
 target_compile_options(

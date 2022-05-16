@@ -3,6 +3,7 @@ project(habitat LANGUAGES C CXX CUDA)
 
 # Include our custom find module files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set(CMAKE_CUDA_ARCHITECTURES 60 61 75 86 CACHE STRING "CUDA architectures" FORCE)
 
 # Find all dependencies
 find_package(CUDAToolkit REQUIRED)

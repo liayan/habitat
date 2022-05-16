@@ -1,5 +1,6 @@
 #include <Metric.h>
 #include <Parser.h>
+#include <cupti_callbacks.h>
 #include <nvperf_host.h>
 #include <nvperf_cuda_host.h>
 #include <iostream>
@@ -63,36 +64,35 @@ namespace NV {
                 std::vector<std::string> temp;
                 GetRawMetricRequests(metricsContext, metricNames, rawMetricRequests, temp);
 
-                NVPA_RawMetricsConfigOptions metricsConfigOptions = { NVPA_RAW_METRICS_CONFIG_OPTIONS_STRUCT_SIZE };
+                NVPW_CUDA_RawMetricsConfig_Create_Params metricsConfigOptions = { NVPW_CUDA_RawMetricsConfig_Create_Params_STRUCT_SIZE };
                 metricsConfigOptions.activityKind = NVPA_ACTIVITY_KIND_PROFILER;
                 metricsConfigOptions.pChipName = chipName.c_str();
-                NVPA_RawMetricsConfig* pRawMetricsConfig;
-                RETURN_IF_NVPW_ERROR(false, NVPA_RawMetricsConfig_Create(&metricsConfigOptions, &pRawMetricsConfig));
+                RETURN_IF_NVPW_ERROR(false, NVPW_CUDA_RawMetricsConfig_Create(&metricsConfigOptions));
 
                 NVPW_RawMetricsConfig_Destroy_Params rawMetricsConfigDestroyParams = { NVPW_RawMetricsConfig_Destroy_Params_STRUCT_SIZE };
-                rawMetricsConfigDestroyParams.pRawMetricsConfig = pRawMetricsConfig;
+                rawMetricsConfigDestroyParams.pRawMetricsConfig = metricsConfigOptions.pRawMetricsConfig;
                 SCOPE_EXIT([&]() { NVPW_RawMetricsConfig_Destroy((NVPW_RawMetricsConfig_Destroy_Params *)&rawMetricsConfigDestroyParams); });
 
                 NVPW_RawMetricsConfig_BeginPassGroup_Params beginPassGroupParams = { NVPW_RawMetricsConfig_BeginPassGroup_Params_STRUCT_SIZE };
-                beginPassGroupParams.pRawMetricsConfig = pRawMetricsConfig;
+                beginPassGroupParams.pRawMetricsConfig = metricsConfigOptions.pRawMetricsConfig;
                 RETURN_IF_NVPW_ERROR(false, NVPW_RawMetricsConfig_BeginPassGroup(&beginPassGroupParams));
 
                 NVPW_RawMetricsConfig_AddMetrics_Params addMetricsParams = { NVPW_RawMetricsConfig_AddMetrics_Params_STRUCT_SIZE };
-                addMetricsParams.pRawMetricsConfig = pRawMetricsConfig;
+                addMetricsParams.pRawMetricsConfig = metricsConfigOptions.pRawMetricsConfig;
                 addMetricsParams.pRawMetricRequests = &rawMetricRequests[0];
                 addMetricsParams.numMetricRequests = rawMetricRequests.size();
                 RETURN_IF_NVPW_ERROR(false, NVPW_RawMetricsConfig_AddMetrics(&addMetricsParams));
 
                 NVPW_RawMetricsConfig_EndPassGroup_Params endPassGroupParams = { NVPW_RawMetricsConfig_EndPassGroup_Params_STRUCT_SIZE };
-                endPassGroupParams.pRawMetricsConfig = pRawMetricsConfig;
+                endPassGroupParams.pRawMetricsConfig = metricsConfigOptions.pRawMetricsConfig;
                 RETURN_IF_NVPW_ERROR(false, NVPW_RawMetricsConfig_EndPassGroup(&endPassGroupParams));
 
                 NVPW_RawMetricsConfig_GenerateConfigImage_Params generateConfigImageParams = { NVPW_RawMetricsConfig_GenerateConfigImage_Params_STRUCT_SIZE };
-                generateConfigImageParams.pRawMetricsConfig = pRawMetricsConfig;
+                generateConfigImageParams.pRawMetricsConfig = metricsConfigOptions.pRawMetricsConfig;
                 RETURN_IF_NVPW_ERROR(false, NVPW_RawMetricsConfig_GenerateConfigImage(&generateConfigImageParams));
 
                 NVPW_RawMetricsConfig_GetConfigImage_Params getConfigImageParams = { NVPW_RawMetricsConfig_GetConfigImage_Params_STRUCT_SIZE };
-                getConfigImageParams.pRawMetricsConfig = pRawMetricsConfig;
+                getConfigImageParams.pRawMetricsConfig = metricsConfigOptions.pRawMetricsConfig;
                 getConfigImageParams.bytesAllocated = 0;
                 getConfigImageParams.pBuffer = NULL;
                 RETURN_IF_NVPW_ERROR(false, NVPW_RawMetricsConfig_GetConfigImage(&getConfigImageParams));
