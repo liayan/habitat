@@ -80,7 +80,6 @@ def config_to_profiler_args(config):
     if in_channels < MIN_IN_CHANNELS or out_channels < MIN_OUT_CHANNELS:
         return None
 
-    device = torch.device('cuda')
     conv2d = torch.nn.Conv2d(
         in_channels=in_channels,
         out_channels=out_channels,
@@ -88,13 +87,13 @@ def config_to_profiler_args(config):
         stride=stride,
         padding=padding,
         bias=bias,
-    ).to(device)
+    ).cuda()
     inp = torch.randn((
         batch,
         in_channels,
         image_size,
         image_size,
-    ), device=device)
+    )).cuda()
     # NOTE: This is important: for most convolutions, we will also need the
     #       gradient with respect to the input to be able to backpropagate to
     #       earlier operations in the network.
